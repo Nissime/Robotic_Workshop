@@ -1,0 +1,6 @@
+<<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <param name="robot_description" textfile="$(find My_Robot)/My_Robot.urdf" />
+  <include file="$(find gaebo_ros)/launch/empty_world.launch" />
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model My_Robot" output="screenlog" respawn="truefalse">
+</launch>

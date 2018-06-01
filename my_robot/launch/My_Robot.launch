@@ -1,0 +1,25 @@
+<launch>
+
+
+ <arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz" />
+
+<!-- Load the TortoiseBot URDF model into the parameter server -->
+  <param name="robot_description" textfile="$(find my_robot)/urdf/My_Robot.urdf" />
+<!-- Start Gazebo with an empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+
+<!-- Start rviz with  -->
+<!--include file="/home/catkin_ws/src/Robotics_Workshop/my_robot/urdf/run_my_robot_urdf.sh"/-->
+
+ <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
+<!-- Spawn a TortoiseBot in Gazebo, taking the description from the
+parameter server -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+        args="-param robot_description -urdf -model My_Robot" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+        type="robot_state_publisher"/>
+
+
+
+</launch>
