@@ -38,10 +38,10 @@
     <child link="fcu" />
     <!-- FCU located on top of robot
          -->
-    <origin xyz="0 0 0.26" rpy="0 0 0" />
+    <origin xyz="0 0 0.26" rpy="0 1.57 0" />
   </joint>
 
-  
+
   <link name="front_caster">
     <visual>
       <geometry>

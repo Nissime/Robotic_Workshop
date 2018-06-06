@@ -7,27 +7,24 @@
   <param name="robot_description" textfile="$(find my_robot)/urdf/My_Robot.urdf" />
 <!-- Start Gazebo with an empty world -->
 
-  <include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+  <!--include file="$(find gazebo_ros)/launch/empty_world.launch"/>-->
 
-  <arg name="fcu_url" default="udp://:14540@127.0.0.1:14557" /> <!-- Port et baudrate of the connexion with Pixhawk -->
-  <arg name="gcs_url" default="" /> <!-- Retransmission to a GCS like Mavproxy does -->
+  <arg name="fcu_url" default="udp://:14561@127.0.0.1:14560" /> <!-- Port et baudrate of the connexion with Pixhawk -->
+  <arg name="gcs_url" default="udp://:14557@127.0.0.1:14550" /> <!-- Retransmission to a GCS like Mavproxy does -->
   <arg name="tgt_system" default="1" /> <!-- Mavlink id of your drone, default is 1 -->
   <arg name="tgt_component" default="1" /> <!-- Mavlink component id of your drone, default is 1 -->
   <arg name="log_output" default="screen" /> <!-- Where ROS will ouput its message, screen is your current terminal -->
 
+  <arg name="est" default="ekf2"/>
+  <arg name="vehicle" default="rover"/>
+  <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/$(arg vehicle)"/>
+  <!-- gazebo configs -->
+  <!-- Start rviz with  -->
+  <!--include file="/home/catkin_ws/src/Robotics_Workshop/my_robot/urdf/run_my_robot_urdf.sh"/-->
 
+ <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />-->
+  <node name="sitl" pkg="px4" type="px4" output="screen" args="$(find px4) $(arg rcS)"/>
 
-<!-- Start rviz with  -->
-<!--include file="/home/catkin_ws/src/Robotics_Workshop/my_robot/urdf/run_my_robot_urdf.sh"/-->
-
- <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
-
-<!-- Spawn a TortoiseBot in Gazebo, taking the description from the
-parameter server -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
-        args="-param robot_description -urdf -model My_Robot" />
-  <node name="robot_state_publisher" pkg="robot_state_publisher"
-        type="robot_state_publisher"/>
 
   <include file="$(find mavros)/launch/node.launch"> <!-- This launch file will launch another launch file -->
       <arg name="pluginlists_yaml" value="$(find mavros)/launch/px4_pluginlists.yaml" /> <!-- Mavros plugin configuration, we will modify that later -->
@@ -39,6 +36,18 @@ parameter server -->
       <arg name="tgt_component" value="$(arg tgt_component)" />
       <arg name="log_output" value="$(arg log_output)" />
   </include>
+<!-- Spawn a TortoiseBot in Gazebo, taking the description from the
+parameter server -->
+<!--
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+        args="-param robot_description -urdf -model My_Robot" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+        type="robot_state_publisher"/>
+      -->
+
+  <!--include file="$(find gazebo_ros)/launch/empty_world.launch"/>-->
+
 
 
 </launch>

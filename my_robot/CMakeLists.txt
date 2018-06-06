@@ -10,6 +10,7 @@ project(my_robot)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   rospy
+  roscpp
   rviz
   tf
   urdf
