@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="makeblock_ros" type="cmd_vel_listener.py"
+        name="cmd_vel_listener" output="screen"/>
+
+</launch>
