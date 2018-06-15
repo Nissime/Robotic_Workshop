@@ -1,6 +1,7 @@
 <launch>
 
 
+  <arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz" />
 
   <arg name="fcu_url" default="udp://:14540@127.0.0.1:14557" /> <!-- Port et baudrate of the connexion with Pixhawk -->
   <arg name="gcs_url" default="" />
@@ -34,9 +35,9 @@
   <arg name="Y" default="0"/>
   <!-- vehicle model and world -->
   <arg name="est" default="ekf2"/>
-  <arg name="vehicle" default="iris"/>
+  <arg name="vehicle" default="rover"/>
   <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/empty.world"/>
-  <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/$(arg vehicle).sdf"/>
+  <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/rover_2.sdf"/>
   <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/$(arg vehicle)"/>
   <!-- gazebo configs -->
   <arg name="gui" default="true"/>
@@ -57,4 +58,6 @@
   </include>
   <!-- gazebo model -->
   <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -file $(arg sdf) -model $(arg vehicle) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
+
 </launch>
