@@ -70,7 +70,7 @@ while not rospy.is_shutdown():
     delta_x = (vx * cos(th) - vy * sin(th)) * dt
     delta_y = (vx * sin(th) + vy * cos(th)) * dt
     delta_th = vth * dt
-    print "DEBUG speeds WC vx ", delta_x , " vy  " , delta_y ," vth ", vth
+    print "DEBUG speeds WC vx ", delta_x , " vy  " , delta_y ," vth ", vth, "rad/s"
     x += delta_x
     y += delta_y
     th += delta_th
