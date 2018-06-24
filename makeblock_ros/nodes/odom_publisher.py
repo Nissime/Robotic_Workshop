@@ -39,7 +39,7 @@ def calc_speeds():
     delta_2_mm=enc2_speed * robot_wheel_circum /robot_wheel_CPR
     v_robot=(enc1_speed+enc2_speed)/2
     vth_robot=(delta_2_mm-delta_1_mm) / robot_base_circum * 360
-    print "DEBUG speeds robot ", vx , "  mm/s  vth  " , vth , " deg/s"
+    print "DEBUG speeds robot ", vx , "  mm/s  vth  " , vth_robot , " deg/s"
     return (v_robot,vth_robot)
 
 rospy.Subscriber("rosbot_encoder_1_speed", Float32, enc1_speed_onRead)
