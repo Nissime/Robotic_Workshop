@@ -1,6 +1,7 @@
-
 <launch>
 
+
+  <arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz" />
 
   <arg name="fcu_url" default="udp://:14540@127.0.0.1:14557" /> <!-- Port et baudrate of the connexion with Pixhawk -->
   <arg name="gcs_url" default="" />
@@ -9,8 +10,6 @@
   <arg name="log_output" default="screen" />
   <arg name="fcu_protocol" default="v2.0" />
   <arg name="respawn_mavros" default="false" />
-  <arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz" />
-
 
   <include file="$(find mavros)/launch/node.launch">
     <arg name="pluginlists_yaml" value="$(find mavros)/launch/px4_pluginlists.yaml" />
@@ -25,11 +24,20 @@
     <arg name="respawn_mavros" default="$(arg respawn_mavros)" />
   </include>
 
-
+  <!-- Posix SITL environment launch script -->
+<!-- launches PX4 SITL, Gazebo environment, and spawns vehicle -->
+<!-- vehicle pose -->
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0"/>
+  <arg name="R" default="0"/>
+  <arg name="P" default="0"/>
+  <arg name="Y" default="0"/>
+  <!-- vehicle model and world -->
   <arg name="est" default="ekf2"/>
   <arg name="vehicle" default="rover"/>
   <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/empty.world"/>
-  <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/rover.sdf"/>
+  <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg vehicle)/rover_2.sdf"/>
   <arg name="rcS" default="$(find px4)/posix-configs/SITL/init/$(arg est)/$(arg vehicle)"/>
   <!-- gazebo configs -->
   <arg name="gui" default="true"/>
@@ -37,7 +45,9 @@
   <arg name="verbose" default="false"/>
   <arg name="paused" default="false"/>
   <arg name="respawn_gazebo" default="false"/>
-
+  <!-- PX4 SITL -->
+  <node name="sitl" pkg="px4" type="px4" output="screen" args="$(find px4) $(arg rcS)"/>
+  <!-- Gazebo sim -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="gui" value="$(arg gui)"/>
       <arg name="world_name" value="$(arg world)"/>
@@ -46,25 +56,8 @@
       <arg name="paused" value="$(arg paused)"/>
       <arg name="respawn_gazebo" value="$(arg respawn_gazebo)"/>
   </include>
-  <!-- PX4 SITL -->
-  <node name="sitl" pkg="px4" type="px4" output="screen" args="$(find px4) $(arg rcS)"/>
-  <!-- Load the TortoiseBot URDF model into the parameter server -->
-  <param name="robot_description" textfile="$(find my_robot)/urdf/My_Robot.urdf" />
-  <!-- Start Gazebo with an empty world -->
-
-  <!-- Start rviz with  -->
-  <!--include file="/home/catkin_ws/src/Robotics_Workshop/my_robot/urdf/run_my_robot_urdf.sh"/-->
-
+  <!-- gazebo model -->
+  <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-sdf -file $(arg sdf) -model $(arg vehicle) -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg R) -P $(arg P) -Y $(arg Y)"/>
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
-
-  <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-param robot_description -urdf -model My_Robot"/>
-
-  <!-- Spawn a TortoiseBot in Gazebo, taking the description from the
-  parameter server -->
-
-  <node name="robot_state_publisher" pkg="robot_state_publisher"
-        type="robot_state_publisher"/>
-
-
 
 </launch>

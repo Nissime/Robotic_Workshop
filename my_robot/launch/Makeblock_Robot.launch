@@ -49,7 +49,7 @@
   <!-- PX4 SITL -->
   <node name="sitl" pkg="px4" type="px4" output="screen" args="$(find px4) $(arg rcS)"/>
   <!-- Load the TortoiseBot URDF model into the parameter server -->
-  <param name="robot_description" textfile="$(find my_robot)/urdf/My_Robot.urdf" />
+  <param name="robot_description" textfile="$(find my_robot)/urdf/Makeblock_bot.urdf" />
   <!-- Start Gazebo with an empty world -->
 
   <!-- Start rviz with  -->
@@ -57,7 +57,7 @@
 
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" />
 
-  <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-param robot_description -urdf -model My_Robot"/>
+  <node name="$(anon vehicle_spawn)" pkg="gazebo_ros" type="spawn_model" output="screen" args="-param robot_description -urdf -model Makeblock_bot"/>
 
   <!-- Spawn a TortoiseBot in Gazebo, taking the description from the
   parameter server -->
