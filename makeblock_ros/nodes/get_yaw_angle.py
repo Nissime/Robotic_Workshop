@@ -4,6 +4,8 @@ from nav_msgs.msg import Odometry
 from tf.transformations import euler_from_quaternion, quaternion_from_euler
 from std_msgs.msg import Float32
 
+print "get yaw - started"
+
 def get_rotation (msg):
     global roll, pitch, yaw
     orientation_q = msg.pose.pose.orientation
