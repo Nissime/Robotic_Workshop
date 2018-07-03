@@ -1,0 +1,23 @@
+digraph G {
+node [shape=box];
+"base_link" [label="base_link"];
+"fcu" [label="fcu"];
+"front_wheel_left" [label="front_wheel_left"];
+"front_wheel_right" [label="front_wheel_right"];
+"hokuyo_link" [label="hokuyo_link"];
+"rear_wheel_left" [label="rear_wheel_left"];
+"rear_wheel_right" [label="rear_wheel_right"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base_link" -> "base_to_fcu" [label="xyz: 0 0 0.26 \nrpy: 0 1.5708 -0"]
+"base_to_fcu" -> "fcu"
+"base_link" -> "front_wheel_left_joint" [label="xyz: 0.2825 0.125 -0.15 \nrpy: -1.5708 0 0"]
+"front_wheel_left_joint" -> "front_wheel_left"
+"base_link" -> "front_wheel_right_joint" [label="xyz: 0.2825 -0.125 -0.15 \nrpy: -1.5708 0 0"]
+"front_wheel_right_joint" -> "front_wheel_right"
+"base_link" -> "hokuyo_joint" [label="xyz: 0 0 0.2 \nrpy: 0 -0 0"]
+"hokuyo_joint" -> "hokuyo_link"
+"base_link" -> "rear_wheel_left_joint" [label="xyz: -0.2825 0.125 -0.15 \nrpy: -1.5708 0 0"]
+"rear_wheel_left_joint" -> "rear_wheel_left"
+"base_link" -> "rear_wheel_right_joint" [label="xyz: -0.2825 -0.125 -0.15 \nrpy: -1.5708 0 0"]
+"rear_wheel_right_joint" -> "rear_wheel_right"
+}

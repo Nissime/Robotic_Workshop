@@ -1,1 +1,1 @@
-urdf_to_graphiz My_Robot.urdf
+urdf_to_graphiz Makeblock_bot.urdf
