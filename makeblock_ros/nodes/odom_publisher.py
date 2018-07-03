@@ -9,46 +9,41 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
 from std_msgs.msg import Float32
 
-robot_wheel_base_mm=100 #TODO not accurate - need to measure
+robot_wheel_base_mm=85 #wheel distance is 170mm
 robot_wheel_radius_mm=31.5
 robot_wheel_CPR=368 #clicks per rotation of wheel
 pi=3.14
 robot_wheel_circum=2*pi*robot_wheel_radius_mm
 robot_base_circum=2*pi*robot_wheel_base_mm
-enc1=0
-enc1_last=0
-enc2=0
-enc2_last=0
+
+enc1_speed=0
+enc2_speed=0
 
 rospy.init_node('odometry_publisher')
 
-def enc1_onRead(msg):
-    global enc1
-    enc1=msg.data
+def enc1_speed_onRead(msg):
+    global enc1_speed
+    enc1_speed=msg.data
 
-def enc2_onRead(msg):
-    global enc2
-    enc2=-1*msg.data  #invert one encoder because of robot struct
+def enc2_speed_onRead(msg):
+    global enc2_speed
+    enc2_speed=-1*msg.data  #invert one encoder because of robot struct
 
 def calc_speeds():
-    global enc1
-    global enc2
-    global enc1_last
-    global enc2_last
-    delta_1 = enc1 - enc1_last
-    delta_2 = enc2 - enc2_last
-    print "DEBUG speeds ", delta_1 , "  " , delta_2 , " clicks/s "
-    delta_1_mm=delta_1 * robot_wheel_circum /robot_wheel_CPR
-    delta_2_mm=delta_2 * robot_wheel_circum /robot_wheel_CPR
-    vx=(delta_1_mm+delta_2_mm)/2
-    vth=(delta_2_mm-delta_1_mm) / robot_base_circum * 360
-    print "DEBUG speeds vx ", vx , "  mm/s  vth  " , vth , " deg/s"
-    enc1_last=enc1
-    enc2_last=enc2
-    return (vx,vth)
 
-rospy.Subscriber("rosbot_encoder_1", Float32, enc1_onRead)
-rospy.Subscriber("rosbot_encoder_2", Float32, enc2_onRead)
+    global enc1_speed
+    global enc2_speed
+
+    print "DEBUG speeds clicks/s ", enc1_speed , "  " , enc2_speed
+    delta_1_mm=enc1_speed * robot_wheel_circum /robot_wheel_CPR
+    delta_2_mm=enc2_speed * robot_wheel_circum /robot_wheel_CPR
+    v_robot=(enc1_speed+enc2_speed)/2
+    vth_robot=(delta_2_mm-delta_1_mm) / robot_base_circum * 360
+    print "DEBUG speeds robot ", vx , "  mm/s  vth  " , vth_robot , " deg/s"
+    return (v_robot,vth_robot)
+
+rospy.Subscriber("rosbot_encoder_1_speed", Float32, enc1_speed_onRead)
+rospy.Subscriber("rosbot_encoder_2_speed", Float32, enc2_speed_onRead)
 
 odom_pub = rospy.Publisher("odom", Odometry, queue_size=50)
 odom_broadcaster = tf.TransformBroadcaster()
@@ -64,17 +59,18 @@ vth = 0.0
 current_time = rospy.Time.now()
 last_time = rospy.Time.now()
 
-r = rospy.Rate(2.0)
+r = rospy.Rate(5.0)
 while not rospy.is_shutdown():
-    print enc1
+
     current_time = rospy.Time.now()
-    vx,vth=calc_speeds()
+    vx,vth_degrees=calc_speeds()
+    vth=vth_degrees*pi/180
     # compute odometry in a typical way given the velocities of the robot
     dt = (current_time - last_time).to_sec()
     delta_x = (vx * cos(th) - vy * sin(th)) * dt
     delta_y = (vx * sin(th) + vy * cos(th)) * dt
     delta_th = vth * dt
-
+    print "DEBUG speeds WC vx ", delta_x , " vy  " , delta_y ," vth ", vth, "rad/s"
     x += delta_x
     y += delta_y
     th += delta_th
