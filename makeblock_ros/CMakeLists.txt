@@ -13,6 +13,7 @@ catkin_python_setup()
 add_service_files(
   FILES
   MakeBlockMover.srv
+  TwoFloats.srv
 )
 generate_messages(
   DEPENDENCIES
