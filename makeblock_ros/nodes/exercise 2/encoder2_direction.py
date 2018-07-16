@@ -17,7 +17,7 @@ def encoder2_callback(msg):
 
     prev_count=current_count
 
-rospy.init_node('mBot_encoder_subscribe')
+rospy.init_node('makeblock_encoder_2_subscriber')
 
 rospy.Subscriber("rosbot_encoder_2", Float32, encoder2_callback)
 

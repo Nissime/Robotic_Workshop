@@ -59,7 +59,7 @@ def move():
 
     print "2-moving" , target_dist , "mm"
     while(abs(current_distance - target_dist)>linear_tolerance):
-        #Publish the velocity
+        #Publish the linear velocity
         vel_msg.linear.x = sign(target_dist)*linear_speed
         velocity_publisher.publish(vel_msg)
         print current_distance - target_dist, "to go, speed" , sign(target_dist)*linear_speed

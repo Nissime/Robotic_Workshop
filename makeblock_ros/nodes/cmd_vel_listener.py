@@ -8,7 +8,7 @@ import tf.transformations
 from geometry_msgs.msg import Twist
 from makeblock_ros.srv import *
 
-robot_wheel_base_mm=100 #TODO not accurate - need to measure
+robot_wheel_base_mm=85 #wheel distance is 170mm
 robot_wheel_radius_mm=31.5
 robot_wheel_CPR=368 #clicks per rotation of wheel
 pi=3.14
@@ -31,7 +31,7 @@ def callback(msg):
     rospy.loginfo("Linear Components: [%f, %f, %f]"%(msg.linear.x, msg.linear.y, msg.linear.z))
     rospy.loginfo("Angular Components: [%f, %f, %f]"%(msg.angular.x, msg.angular.y, msg.angular.z))
     move_mm_sec=msg.linear.x
-    turn_mm_sec=msg.angular.z * robot_base_circum / 360
+    turn_mm_sec=msg.angular.z * robot_base_circum / (2*pi)
     leftwheel_clicks=mm_to_clicks(move_mm_sec+turn_mm_sec)
     rightwheel_clicks=mm_to_clicks(move_mm_sec-turn_mm_sec)*-1
     print "DEBUG left: ", leftwheel_clicks, " right: " , rightwheel_clicks
