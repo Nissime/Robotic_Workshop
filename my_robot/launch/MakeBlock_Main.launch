@@ -1,6 +1,6 @@
 <launch>
-  <include file="$(find my_robot)/launch/Husky_Robot.launch"/>
 
+  <include file="/rosbot1/catkin_ws/src/Workshop/my_robot/urdf/run_my_robot_urdf.sh/">
 
 
 </launch>
