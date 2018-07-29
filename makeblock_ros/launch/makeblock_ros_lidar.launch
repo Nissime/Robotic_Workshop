@@ -1,0 +1,12 @@
+<launch>
+  <node pkg="makeblock_ros" type="makeblock_ros_teleop.py" name="makeblock_ros_one" output="screen"/>
+
+  <node pkg="makeblock_ros" type="odom_publisher.py" name="odom_publisher" output="screen"/>
+  <node pkg="makeblock_ros" type="cmd_vel_listener.py" name="cmd_vel_listener" output="screen"/>
+  <node pkg="makeblock_ros" type="get_yaw_angle.py" name="get_yaw_angle" output="screen"/>
+  <node pkg="makeblock_ros" type="move_turn_LC.py" name="move_turn_LC" output="screen"/>
+  <node pkg="makeblock_ros" type="navigator.py" name="navigator" output="screen"/>
+  <!--include file="$(find sweep_ros)/launch/sweep2scan.launch"/-->
+  <!--param name="robot_description" textfile="$(find my_robot)/urdf/My_Robot1.urdf"/-->
+  <!--node name="rviz" pkg="rviz" type="rviz"/-->
+</launch>
