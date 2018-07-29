@@ -6,13 +6,6 @@ from megapi import *
 from makeblock_ros.srv import *
 from time import sleep
 
-robot_wheel_base_mm=85 #wheel distance is 170mm
-robot_wheel_radius_mm=31.5
-robot_wheel_CPR=368 #clicks per rotation of wheel
-pi=3.14
-robot_wheel_circum=2*pi*robot_wheel_radius_mm
-robot_base_circum=2*pi*robot_wheel_base_mm
-
 
 enc1_last=0
 enc2_last=0
