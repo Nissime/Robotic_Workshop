@@ -21,23 +21,6 @@
                ixy="0" ixz="0" iyz="0"/>
     </inertial>
   </link>
-  <link name="fcu">
-    <!-- FCU frame (mavros uses this link for most topics) -->
-    <visual>
-      <geometry>
-        <!-- Pixhawk -->
-        <box size=".085 .052 .02" />
-      </geometry>
-      <material name="dark-grey" />
-    </visual>
-  </link>
-  <joint name="base_to_fcu" type="fixed">
-    <parent link="base_link" />
-    <child link="fcu" />
-    <!-- FCU located on top of robot
-         -->
-    <origin xyz="0 0 0.26" rpy="0 1.57 0" />
-  </joint>
   <link name="front_caster">
     <visual>
       <geometry>

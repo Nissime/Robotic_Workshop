@@ -30,7 +30,7 @@ def callback(msg):
     rospy.loginfo("Received a /cmd_vel message!")
     rospy.loginfo("Linear Components: [%f, %f, %f]"%(msg.linear.x, msg.linear.y, msg.linear.z))
     rospy.loginfo("Angular Components: [%f, %f, %f]"%(msg.angular.x, msg.angular.y, msg.angular.z))
-    move_mm_sec=msg.linear.x
+    move_mm_sec=msg.linear.x*1000 #conversion from m/s to mm/s
     turn_mm_sec=msg.angular.z * robot_base_circum / (2*pi)
     leftwheel_clicks=mm_to_clicks(move_mm_sec+turn_mm_sec)
     rightwheel_clicks=mm_to_clicks(move_mm_sec-turn_mm_sec)*-1

@@ -64,7 +64,8 @@ while not rospy.is_shutdown():
 
     current_time = rospy.Time.now()
     vx,vth_degrees=calc_speeds()
-    vth=vth_degrees*pi/180
+    vth=vth_degrees*pi/180*2.4 #conversion to radians/sec * fudge factor of 2.4?? + invert direction to coordinate with lidar
+    vx=vx/228 #conversion from mm/s to m/s * fudge factor 228????
     # compute odometry in a typical way given the velocities of the robot
     dt = (current_time - last_time).to_sec()
     delta_x = (vx * cos(th) - vy * sin(th)) * dt
