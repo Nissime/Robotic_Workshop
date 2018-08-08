@@ -1,0 +1,6 @@
+timedatectl set-ntp false
+timedatectl set-time 2018-08-06
+timedatectl set-time 17:57:00
+timedatectl status
+
+

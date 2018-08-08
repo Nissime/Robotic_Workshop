@@ -8,7 +8,7 @@ padding=10
 
 def callback(msg):
     ranges=msg.ranges
-    mid_index=len(ranges)/2
+    mid_index=len(ranges)/2 #returns the middle point of the range - front angle, 180 degrees
     min_index=mid_index-padding
     max_index=mid_index+padding
     actual_ranges=[]
@@ -21,10 +21,12 @@ def callback(msg):
         avg_range=np.mean(actual_ranges)
         dist_publisher.publish(avg_range)
         print avg_range
+    else:
+        print "lidar out of range"
 
 dist_publisher = rospy.Publisher('front_dist', Float32, queue_size=1)
 rospy.init_node('lidar_subscriber')
 
-rospy.Subscriber("/scan", LaserScan, callback)
+rospy.Subscriber("/rosbot/laser/scan", LaserScan, callback)
 print "start lidar subscriber"
 rospy.spin()

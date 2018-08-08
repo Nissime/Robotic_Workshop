@@ -42,13 +42,13 @@ def calc_heading(req):
     
     print "------angle/range request-------"
     print "rotate angle" , target_angle , "radians"
-    print "move distance" , target_dist , "mm"
+    print "move distance" , target_dist , "m"
     move()
     return 1
 
 def move():
-    linear_speed=15.0
-    angular_speed=0.15
+    linear_speed=0.1
+    angular_speed=0.25
 
 
     global target_dist,target_angle,current_dist,current_angle
@@ -76,7 +76,7 @@ def move():
     vel_msg.angular.z = 0
     velocity_publisher.publish(vel_msg)
 
-    print "step 2-moving" , target_dist , "mm"
+    print "step 2-moving" , target_dist , "m"
     while(abs(current_dist) < abs(target_dist)):
         #Publish the linear velocity
         vel_msg.linear.x = sign(target_dist)*linear_speed
