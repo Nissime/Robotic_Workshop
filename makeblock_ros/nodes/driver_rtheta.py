@@ -27,7 +27,8 @@ def get_current_position_orientation (msg):
     (roll, pitch, yaw) = euler_from_quaternion (orientation_list)
     current_yaw=yaw
 
-def yaw_delta(delta)
+
+def yaw_delta(delta):
     if delta > pi:
         turn_angle=turn_angle-2*pi
     if delta < -pi:
@@ -36,7 +37,7 @@ def yaw_delta(delta)
 def move(msg):
     linear_speed=0.1
     linear_threshold=0.015
-    angular_speed=0.8
+    angular_speed=1.0
     angular_threshold=0.1
 
     #read the requested angle,distance. 
@@ -44,7 +45,7 @@ def move(msg):
     turn_angle=msg.z
 
     #pick the rotation direction according to the incoming message 
-    if turn_angle > 0:
+    if turn_angle < 0:
         angular_speed= -1*angular_speed
 
     #take snapshot of starting position for distance measurement
@@ -52,23 +53,32 @@ def move(msg):
     start_y=current_y
     driven_distance=0
     start_angle=current_yaw
+    final_angle=current_yaw+turn_angle
 
-    #initialize the cmd_vel message (message type is Twist)
+    #initialize the cmd_vel message for turning in place (message type is Twist)
     vel_msg = Twist()
     vel_msg.linear.x = 0
     vel_msg.linear.y = 0
     vel_msg.linear.z = 0
     vel_msg.angular.x = 0
     vel_msg.angular.y = 0
-    vel_msg.angular.z = 0
+    vel_msg.angular.z = angular_speed
 
+    print "current yaw ", current_yaw, "required yaw" , final_angle , "radians , speed" , angular_speed
+    while abs(final_angle - current_yaw) > angular_threshold :
 
-    print "current yaw ", current_yaw, "required yaw" , current_yaw+turn_angle , "radians"
-    while abs(turn_angle - current_yaw) > angular_threshold :
-        #Publish the angular velocity in the proper direction
-        vel_msg.angular.z = sign(turn_angle - current_yaw)*angular_speed
+	#correct for "compass rollover" effect - the point where the yaw turns from +pi to -pi
+        if final_angle-current_yaw < -2*pi:
+            print "rollover -" 
+            final_angle=final_angle+2*pi
+        if final_angle-current_yaw > 2*pi:
+            print "rollover +" 
+            final_angle=final_angle-2*pi
+
+        #Publish the angular velocity 
         velocity_publisher.publish(vel_msg)
-        print turn_angle-current_yaw , "rads to go, speed" , vel_msg.angular.z
+
+        print current_yaw - final_angle , "radians to go..."
         sleep(0.1)
 
     #When we are close enough, stop turning
